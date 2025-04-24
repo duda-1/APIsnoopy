@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APIsnoopy", "APIsnoopy\APIsnoopy.csproj", "{044C1727-F27E-4012-B394-51F8DE45CFD6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{044C1727-F27E-4012-B394-51F8DE45CFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044C1727-F27E-4012-B394-51F8DE45CFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044C1727-F27E-4012-B394-51F8DE45CFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044C1727-F27E-4012-B394-51F8DE45CFD6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE4A7D9D-15E1-497F-97F4-B3DEC81CD567}
+	EndGlobalSection
+EndGlobal
