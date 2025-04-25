@@ -17,7 +17,7 @@ namespace APIsnoopy.Models
 
         [Column("senha")]
         public string Senha { get; set; }
-        [Column("artista")]
-        public bool artista {  get; set; }
+        [Column("img_url")]
+        public string img_url {  get; set; }
     }
 }

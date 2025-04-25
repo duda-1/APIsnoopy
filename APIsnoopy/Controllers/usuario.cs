@@ -56,7 +56,7 @@ namespace APIsnoopy.Controllers
                     Nome = nomeNormalizado,
                     Email = emailNormalizado,
                     Senha = senhaHash,
-                    artista = request.Artista // Novo campo "Artista"
+                    img_url = request.ImgUrl // Substituído o campo "Artista" por "ImgUrl"
                 };
 
                 // Inserir o novo usuário no banco
@@ -71,7 +71,7 @@ namespace APIsnoopy.Controllers
                         {
                             newUser.Nome,
                             newUser.Email,
-                            newUser.artista,
+                            newUser.img_url,
                         }
                     });
                 }
@@ -93,6 +93,6 @@ namespace APIsnoopy.Controllers
         public string Nome { get; set; }
         public string Email { get; set; }
         public string Senha { get; set; }
-        public bool Artista { get; set; } // Novo campo "Artista"
+        public string ImgUrl { get; set; } // Substituído "Artista" por "ImgUrl"
     }
 }
