@@ -79,14 +79,17 @@ namespace APIsnoopy.Controllers
         }
 
         // MÉTODO PUT PARA ATUALIZAR USUÁRIO
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequestDto request)
+        [HttpPut("{nome}")]
+        public async Task<IActionResult> UpdateUser(string nome, [FromBody] UpdateUserRequestDto request)
         {
             try
             {
+                // Normaliza o nome antes da busca
+                var nomeNormalizado = nome.Trim().ToLower();
+
                 var usuariosEncontrados = await _supabase
                     .From<usuarios>()
-                    .Where(u => u.id == id)
+                    .Where(u => u.Nome == nomeNormalizado) // Agora é simples, sem métodos dentro do Where
                     .Get();
 
                 var usuario = usuariosEncontrados.Models.FirstOrDefault();
@@ -135,21 +138,23 @@ namespace APIsnoopy.Controllers
                 return StatusCode(500, new { error = "Erro interno no servidor.", details = ex.Message });
             }
         }
-    }
 
-    public class RegisterRequestDto
-    {
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public string Senha { get; set; }
-        public string ImgUrl { get; set; }
-    }
 
-    public class UpdateUserRequestDto
-    {
-        public string Nome { get; set; }
-        public string Email { get; set; }
-        public string Senha { get; set; }
-        public string ImgUrl { get; set; }
+
+        public class RegisterRequestDto
+        {
+            public string Nome { get; set; }
+            public string Email { get; set; }
+            public string Senha { get; set; }
+            public string ImgUrl { get; set; }
+        }
+
+        public class UpdateUserRequestDto
+        {
+            public string Nome { get; set; }
+            public string Email { get; set; }
+            public string Senha { get; set; }
+            public string ImgUrl { get; set; }
+        }
     }
 }
