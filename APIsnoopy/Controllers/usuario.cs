@@ -78,18 +78,15 @@ namespace APIsnoopy.Controllers
             }
         }
 
-        // MÉTODO PUT PARA ATUALIZAR USUÁRIO
-        [HttpPut("{nome}")]
-        public async Task<IActionResult> UpdateUser(string nome, [FromBody] UpdateUserRequestDto request)
+        // MÉTODO PUT PARA ATUALIZAR USUÁRIO com id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequestDto request)
         {
             try
             {
-                // Normaliza o nome antes da busca
-                var nomeNormalizado = nome.Trim().ToLower();
-
                 var usuariosEncontrados = await _supabase
                     .From<usuarios>()
-                    .Where(u => u.Nome == nomeNormalizado) // Agora é simples, sem métodos dentro do Where
+                    .Where(u => u.id == id)
                     .Get();
 
                 var usuario = usuariosEncontrados.Models.FirstOrDefault();
@@ -99,7 +96,6 @@ namespace APIsnoopy.Controllers
                     return NotFound(new { error = "Usuário não encontrado." });
                 }
 
-                // Atualizar apenas se o campo vier preenchido
                 if (!string.IsNullOrWhiteSpace(request.Nome))
                     usuario.Nome = request.Nome.Trim().ToLower();
 
@@ -139,6 +135,51 @@ namespace APIsnoopy.Controllers
             }
         }
 
+        //Metodo Put busca pelo nome e edita somente o campo senha 
+        [HttpPut("RedefinirSenhaPorNome/{nome}")]
+        public async Task<IActionResult> RedefinirSenhaPorNome(string nome, [FromBody] RedefinirSenhaRequestDto request)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.NovaSenha))
+                {
+                    return BadRequest(new { error = "A nova senha é obrigatória." });
+                }
+
+                var nomeNormalizado = nome.Trim().ToLower();
+
+                var usuariosEncontrados = await _supabase
+                    .From<usuarios>()
+                    .Where(u => u.Nome == nomeNormalizado)
+                    .Get();
+
+                var usuario = usuariosEncontrados.Models.FirstOrDefault();
+
+                if (usuario == null)
+                {
+                    return NotFound(new { error = "Usuário não encontrado." });
+                }
+
+                usuario.Senha = BCrypt.Net.BCrypt.HashPassword(request.NovaSenha);
+
+                var updateResult = await _supabase.From<usuarios>().Update(usuario);
+
+                if (updateResult.Models.Any())
+                {
+                    return Ok(new { message = "Senha redefinida com sucesso!" });
+                }
+                else
+                {
+                    return StatusCode(500, new { error = "Erro ao atualizar a senha." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Erro interno no servidor.", details = ex.Message });
+            }
+        }
+
+
 
 
         public class RegisterRequestDto
@@ -155,6 +196,11 @@ namespace APIsnoopy.Controllers
             public string Email { get; set; }
             public string Senha { get; set; }
             public string ImgUrl { get; set; }
+        }
+
+        public class RedefinirSenhaRequestDto
+        {
+            public string NovaSenha { get; set; }
         }
     }
 }
