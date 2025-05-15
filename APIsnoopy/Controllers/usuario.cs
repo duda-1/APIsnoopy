@@ -179,6 +179,40 @@ namespace APIsnoopy.Controllers
             }
         }
 
+        // Método GET para obter informações de um usuário pelo id
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser(Guid id)
+        {
+            try
+            {
+                // Busca o usuário no banco de dados pelo ID
+                var usuariosEncontrados = await _supabase
+                    .From<usuarios>()
+                    .Where(u => u.id == id)
+                    .Get();
+
+                // Verifica se o usuário foi encontrado
+                var usuario = usuariosEncontrados.Models.FirstOrDefault();
+
+                if (usuario == null)
+                {
+                    return NotFound(new { error = "Usuário não encontrado." });
+                }
+
+                // Retorna os dados do usuário
+                return Ok(new
+                {
+                    usuario.id,
+                    usuario.Nome,
+                    usuario.Email,
+                    usuario.img_url // imagem do perfil
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Erro interno no servidor.", details = ex.Message });
+            }
+        }
 
 
 
